@@ -29,13 +29,13 @@ variable "key_pair_name" {
 variable "public_key_path" {
   description = "Chemin vers la clé publique SSH"
   type        = string
-  default     = "~/.ssh/projet-cloud-key.pub"
+  default     = "C:/Users/Rania Oueslati/.ssh/projet-cloud-key.pub"
 }
 
 variable "private_key_path" {
-  description = "Chemin vers la clé privée SSH (pour SSH manuel)"
+  description = "Chemin vers la clé privée SSH"
   type        = string
-  default     = "~/.ssh/projet-cloud-key"
+  default     = "C:/Users/Rania Oueslati/.ssh/projet-cloud-key"
 }
 
 variable "my_ip" {

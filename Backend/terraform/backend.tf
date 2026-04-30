@@ -29,10 +29,12 @@ resource "aws_lb" "main" {
 # Le Target Group contient les instances EC2 backend.
 # L'ALB envoie le trafic vers les instances "saines" du groupe.
 resource "aws_lb_target_group" "backend" {
-  name     = "${var.project_name}-tg"
-  port     = var.app_port
+  name     = "projet-cloud-tg"
+  port     =  var.app_port
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+
+  vpc_id = aws_vpc.main.id
+
 
   # Health check : l'ALB vérifie régulièrement que l'API répond
   # Si GET /health ne renvoie pas 200, l'instance est retirée du pool

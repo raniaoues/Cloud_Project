@@ -1,3 +1,4 @@
+#!/bin/bash   
 set -e
 
 # ── Mise à jour et installation de nginx ──
