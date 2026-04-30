@@ -1,25 +1,51 @@
-#!/bin/bash   
+#!/bin/bash
 set -e
 
-# ── Mise à jour et installation de nginx ──
+# ── Install dependencies ──
 apt update -y
-apt install -y nginx git
+apt install -y nginx git curl nodejs npm
 
-# ── Cloner votre frontend ──
+# ── Install Node (version stable pour Angular) ──
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+apt install -y nodejs
+
+# ── Clone repo ──
 cd /tmp
-git clone ${github_repo} frontend-app
+git clone ${github_repo} app
 
-# ── Copier les fichiers dans le dossier de nginx ──
-cp -r /tmp/frontend-app/frontend/* /var/www/html/
-# Adaptez ce chemin selon la structure de votre dépôt
+# ── Aller dans Angular project (IMPORTANT: client) ──
+cd app/client
 
-# ── Remplacer l'URL de l'API par le DNS de l'ALB ──
-# Votre frontend doit appeler l'ALB, jamais directement une IP EC2 !
-find /var/www/html -name "*.js" -o -name "*.html" | xargs sed -i \
-  "s|http://localhost:${app_port}|http://${alb_dns_name}|g"
+# ── Installer Angular dependencies ──
+npm install
 
-# ── Démarrer nginx ──
-systemctl start nginx
+# ── Build Angular production ──
+npm run build --configuration production
+
+# ── Nettoyer nginx default ──
+rm -rf /var/www/html/*
+
+# ── Copier build Angular vers nginx ──
+# Angular output est souvent dans dist/client (ou dist/<project-name>)
+cp -r dist/* /var/www/html/
+
+# ── Config nginx (SPA Angular fix) ──
+cat > /etc/nginx/sites-available/default <<EOF
+server {
+    listen 80;
+    server_name _;
+
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        try_files \$uri \$uri/ /index.html;
+    }
+}
+EOF
+
+# ── restart nginx ──
+systemctl restart nginx
 systemctl enable nginx
 
-echo "Frontend déployé avec succès "
+echo "Frontend Angular déployé avec succès"
