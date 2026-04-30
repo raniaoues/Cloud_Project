@@ -337,7 +337,9 @@ app.get('/api/users/:id', async (req, res) => {
     return handleStorageError(res, error);
   }
 });
-
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 app.post('/api/users', async (req, res) => {
   const { name, email } = req.body;
 
@@ -387,9 +389,10 @@ app.delete('/api/users/:id', async (req, res) => {
   }
 });
 
-const server = app.listen(port, () => {
+const server = app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });
+
 
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing HTTP server');
