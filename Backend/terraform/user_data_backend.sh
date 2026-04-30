@@ -10,8 +10,7 @@ apt install -y nodejs
 cd /home/ubuntu
 git clone ${github_repo} app
 
-# ← IMPORTANT : va dans le bon sous-dossier où se trouve package.json
-cd app/backend   # ← adapte selon la structure de ton repo !
+cd /home/ubuntu/app/Backend
 
 cat > .env <<EOF
 DB_HOST=${db_host}
@@ -24,6 +23,7 @@ EOF
 
 npm install
 npm install -g pm2
-pm2 start npm --name "app" -- start
-pm2 startup systemd -u root --hp /root
+
+pm2 start npm --name app -- start
 pm2 save
+pm2 startup systemd -u ubuntu --hp /home/ubuntu
