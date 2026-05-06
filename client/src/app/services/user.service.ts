@@ -13,7 +13,7 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://projet-cloud-alb-695171246.us-east-1.elb.amazonaws.com/api/users';
+  private apiUrl = ''http://REPLACE_API_URL/api/users'';
 
   constructor(private http: HttpClient) { }
 
