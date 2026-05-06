@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 export interface User {
   id?: number;
@@ -13,7 +13,7 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://REPLACE_API_URL/api/users';
+  private apiUrl = 'http://projet-cloud-alb-1751652764.us-east-1.elb.amazonaws.com/api/users';
 
   constructor(private http: HttpClient) { }
 
